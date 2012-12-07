@@ -1,0 +1,14 @@
+#!/bin/bash
+
+COMMAND=$1
+APK=$2
+
+for SERIAL in $(adb devices | grep -v List | cut -f 1)
+do
+  if [ ${COMMAND} == "uninstall" ]
+  then
+    `adb -s ${SERIAL} ${COMMAND} ${APK}`
+  else
+    `adb -s ${SERIAL} ${COMMAND} -r ${APK}`
+  fi
+done
