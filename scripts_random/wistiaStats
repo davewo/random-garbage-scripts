@@ -1,0 +1,49 @@
+#!/usr/bin/python
+
+# script to call wistia's api and get loads/plays/hours_watched data for our account
+
+import urllib2
+import ssl
+import collections
+import json
+import argparse
+
+parser = argparse.ArgumentParser(description='Define a date_start and (optionally) a date_end to gather overall usages totals for our Wistia account.')
+
+parser.add_argument('date_start')
+parser.add_argument('date_end')
+
+parser.parse_args()
+# create a password manager
+password_mgr = urllib2.HTTPPasswordMgrWithDefaultRealm()
+
+# set up the url and credentials
+url = "https://api.wistia.com/v1/stats/account/by_date.json?date_start=" + str(date_start) + "&date_end=" + str(date_end)
+username = "api"
+password = "password"
+
+# Add the username and password.
+# If we knew the realm, we could use it instead of None.
+password_mgr.add_password(None, url, username, password)
+
+handler = urllib2.HTTPBasicAuthHandler(password_mgr)
+
+# create "opener" (OpenerDirector instance)
+opener = urllib2.build_opener(handler)
+
+# Install the opener.
+# Now all calls to urllib2.urlopen use our opener.
+urllib2.install_opener(opener)
+
+
+# get the data from the api
+dict = json.load(urllib2.urlopen(url, None))
+
+# get the counts
+counter = collections.Counter()
+for d in dict: 
+    counter.update(d)
+
+print "Total Loads:         " + str(counter[u'loads'])
+print "Total Plays:         " + str(counter[u'plays'])
+print "Total Hours Watched: " + str(counter[u'hours_watched'])
