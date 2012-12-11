@@ -20,8 +20,9 @@ password_mgr = urllib2.HTTPPasswordMgrWithDefaultRealm()
 # set up the url and credentials
 url = "https://api.wistia.com/v1/stats/account/by_date.json?start_date=" + args.date_start + "&end_date=" + args.date_end
 username = "api"
-password = "password"
+password = "f3138c7a95faf8257ab6de77485a22ce9b5fdc6d"
 
+print url
 # Add the username and password.
 # If we knew the realm, we could use it instead of None.
 password_mgr.add_password(None, url, username, password)
@@ -44,6 +45,6 @@ counter = collections.Counter()
 for d in dict: 
     counter.update(d)
 
-print "Total Loads:         " + str(counter[u'loads'])
-print "Total Plays:         " + str(counter[u'plays'])
+print "Total Loads:         " + str(counter[u'load_count'])
+print "Total Plays:         " + str(counter[u'play_count'])
 print "Total Hours Watched: " + str(counter[u'hours_watched'])
