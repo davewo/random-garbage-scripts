@@ -20,7 +20,7 @@ password_mgr = urllib2.HTTPPasswordMgrWithDefaultRealm()
 # set up the url and credentials
 url = "https://api.wistia.com/v1/stats/account/by_date.json?start_date=" + args.date_start + "&end_date=" + args.date_end
 username = "api"
-password = "f3138c7a95faf8257ab6de77485a22ce9b5fdc6d"
+password = "password"
 
 print url
 # Add the username and password.
