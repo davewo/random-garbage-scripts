@@ -13,12 +13,12 @@ parser = argparse.ArgumentParser(description='Define a date_start and (optionall
 parser.add_argument('date_start')
 parser.add_argument('date_end')
 
-parser.parse_args()
+args = parser.parse_args()
 # create a password manager
 password_mgr = urllib2.HTTPPasswordMgrWithDefaultRealm()
 
 # set up the url and credentials
-url = "https://api.wistia.com/v1/stats/account/by_date.json?date_start=" + str(date_start) + "&date_end=" + str(date_end)
+url = "https://api.wistia.com/v1/stats/account/by_date.json?start_date=" + args.date_start + "&end_date=" + args.date_end
 username = "api"
 password = "password"
 
