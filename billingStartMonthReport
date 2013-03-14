@@ -2,25 +2,31 @@
 
 # for team in sysdata
 #   find oldest file in $team/RecurrInvs
-#     if age > 2012-03-01
-#       store age, team
+#   save filename, and tally occurances of unique filename
 
 import subprocess
 import collections
 import os
 
+# actually, a list of directories
 teamList = next(os.walk('.'))[1]
 
 cnt = collections.Counter()
 
 files = []
 
+# directory not found errors are puked to stderr,
+# which end up on the terminal, but not in the list
 for team in teamList:
 	files.append(subprocess.Popen('ls -tr "%s"/RecurrSummary | head -n1'%team, shell=True, stdout=subprocess.PIPE).communicate())
 
+# tally up the filenames
 for file in files:
    cnt[file] +=1
 
+# TODO: pretty print the output as something like:
+#       2012-03,44
 for i in cnt:
    print str(i) + ' ' + str(cnt[i])
+
 
