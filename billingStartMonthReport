@@ -1,0 +1,26 @@
+#!/usr/local/bin/python2.7
+
+# for team in sysdata
+#   find oldest file in $team/RecurrInvs
+#     if age > 2012-03-01
+#       store age, team
+
+import subprocess
+import collections
+import os
+
+teamList = next(os.walk('.'))[1]
+
+cnt = collections.Counter()
+
+files = []
+
+for team in teamList:
+	files.append(subprocess.Popen('ls -tr "%s"/RecurrSummary | head -n1'%team, shell=True, stdout=subprocess.PIPE).communicate())
+
+for file in files:
+   cnt[file] +=1
+
+for i in cnt:
+   print str(i) + ' ' + str(cnt[i])
+
