@@ -1,0 +1,10 @@
+#!/usr/bin/python
+member = [1425933, 1425985]
+account = [1007278, 1006599]
+
+def update(acc, mem):
+  sql = 'update member set account_id = ' + str(acc) + ' where id = ' + str(mem) + ';'
+  return sql
+
+for a, m in zip(account, member):
+  print update(a, m)
