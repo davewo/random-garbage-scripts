@@ -18,15 +18,17 @@ files = []
 # directory not found errors are puked to stderr,
 # which end up on the terminal, but not in the list
 for team in teamList:
-	files.append(subprocess.Popen('ls -tr "%s"/RecurrSummary | head -n1'%team, shell=True, stdout=subprocess.PIPE).communicate())
+   files.append(subprocess.Popen('ls -tr "%s"/RecurrSummary | head -n1'%team, shell=True, stdout=subprocess.PIPE).communicate())
 
 # tally up the filenames
 for file in files:
    cnt[file] +=1
 
-# TODO: pretty print the output as something like:
+# pretty print the output as:
 #       2012-03,44
+# if '.pdf' is to weed out garbage entries from random files
 for i in cnt:
-   print str(i) + ' ' + str(cnt[i])
+   if '.pdf' in i[0]:
+      print str(i[0])[26:33] + ',' + str(cnt[i])
 
 
