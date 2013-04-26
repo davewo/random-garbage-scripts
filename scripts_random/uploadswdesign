@@ -1,0 +1,42 @@
+#!/usr/bin/python
+
+# converted this bash mess:
+# for TEAM in $(cat /tmp/team | uniq); do find * -name "$TEAM-[0-9]*.png" -exec rsync -vz --progress '{}' r1n1:/var/SW/Designs ';' ; done && ssh r1n1 'chmod 444 /var/SW/Designs/*png'
+
+import os
+import subprocess
+import fnmatch
+
+os.chdir('/Users/daveowens/Google Drive/Team Logo Designs/')
+
+teamsFile = open('/tmp/teams', 'r')
+pngs = []
+teamsList = []
+
+# dedupe list of teams
+for team in teamsFile:
+	teamsList.append(team)
+	teamsList = list(set(teamsList))
+
+# locate file by pattern and return path
+def locate(pattern, root=os.curdir):
+  for path, dirs, files in os.walk(os.path.abspath(root)):
+    for filename in fnmatch.filter(files, pattern):
+      yield os.path.join(path, filename)
+
+# build list of files to upload
+for teamAlias in teamsList:
+	teamAlias = teamAlias.rstrip('\n') + '*png'
+	for png in locate(teamAlias):
+		pngs.append(png)
+
+# rsync the files up
+for file in pngs:
+	rsyncargs = ['rsync','-az', file, 'r1n1:/var/SW/Designs/']
+	print 'executing ' + ' '.join(rsyncargs)
+	subprocess.call(rsyncargs)
+
+# fix permissions for importer
+sshargs = ['ssh','r1n1','chmod 444 /var/SW/Designs/*png']
+print 'executing ' + ' '.join(sshargs)
+subprocess.call(sshargs)
